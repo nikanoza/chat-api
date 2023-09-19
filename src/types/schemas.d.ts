@@ -3,4 +3,5 @@ export type NewUser = {
   email: string;
   password: string;
   avatar: string;
+  backLink: string;
 };
