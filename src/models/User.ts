@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { v4 as uuid } from "uuid";
 import { UserType } from "types";
 
 const { String } = Schema.Types;
@@ -23,6 +24,7 @@ const userSchema = new Schema<UserType>({
   id: {
     type: String,
     required: true,
+    default: uuid,
   },
 });
 
