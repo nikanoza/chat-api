@@ -6,7 +6,7 @@ export type UserType = {
   id: string;
 };
 
-export type EmailValidation = {
+export type EmailValidationType = {
   email: string;
   hash: string;
 };

@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
-import { EmailValidation } from "types";
+import { EmailValidationType } from "types";
 
 const { String } = Schema.Types;
 
-const emailValidationSchema = new Schema<EmailValidation>({
+const emailValidationSchema = new Schema<EmailValidationType>({
   email: {
     type: String,
     required: true,
