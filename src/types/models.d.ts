@@ -5,3 +5,8 @@ export type UserType = {
   avatar: string;
   id: string;
 };
+
+export type EmailValidation = {
+  email: string;
+  hash: string;
+};
