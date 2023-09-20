@@ -75,5 +75,19 @@ export const login = async (req: Request, res: Response) => {
     return res.status(422).json({ message: "server error" });
   }
 
-  const result = bcrypt.compare(password, user.password);
+  const result = await bcrypt.compare(password, user.password);
+
+  if (result) {
+    const signData = {
+      name: user.name,
+      email: user.email,
+      id: user.id,
+      avatar: user.avatar,
+    };
+
+    const token = jwt.sign(signData, process.env.JWT_SECRET!);
+    return res.status(200).json({ ...signData, token });
+  }
+
+  return res.status(422).json({ message: "server error" });
 };
