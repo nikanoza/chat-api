@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 import { EmailValidation, User } from "models";
 import { UserRegistrationSchema } from "schemas";
 import { sendEmailVerification } from "mail";
+import loginSchema from "schemas/user-login-schema";
 
 export const createUser = async (req: Request, res: Response) => {
   const { body, file } = req;
@@ -54,4 +56,24 @@ export const verification = async (req: Request, res: Response) => {
   await user.save();
 
   return res.status(200).json({ message: "user verified" });
+};
+
+export const login = async (req: Request, res: Response) => {
+  const { body } = req;
+
+  const validator = await loginSchema(body);
+  const { value, error } = validator.validate(body);
+  if (error) {
+    return res.status(422).json(error.details);
+  }
+
+  const { email, password } = value;
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return res.status(422).json({ message: "server error" });
+  }
+
+  const result = bcrypt.compare(password, user.password);
 };
