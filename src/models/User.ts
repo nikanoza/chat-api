@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { v4 as uuid } from "uuid";
 import { UserType } from "types";
 
-const { String } = Schema.Types;
+const { String, Boolean } = Schema.Types;
 
 const userSchema = new Schema<UserType>({
   name: {
@@ -16,6 +16,11 @@ const userSchema = new Schema<UserType>({
   password: {
     type: String,
     required: true,
+  },
+  verify: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   avatar: {
     type: String,
