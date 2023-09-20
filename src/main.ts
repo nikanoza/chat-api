@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import connect from "./config/mongo.js";
-import authRouter from "routes/auth-router.js";
+import { authRouter } from "routes";
 
 dotenv.config();
 connect();
