@@ -33,7 +33,7 @@ export const createUser = async (req: Request, res: Response) => {
 
   await sendEmailVerification(email, hash, name, backLink);
 
-  return res.status(200).json({ message: "user created" });
+  return res.status(201).json({ message: "user created" });
 };
 
 export const verification = async (req: Request, res: Response) => {
@@ -44,4 +44,14 @@ export const verification = async (req: Request, res: Response) => {
   if (!verify) {
     return res.status(422).json({ message: "server error" });
   }
+
+  const user = await User.findOne({ email: verify.email });
+  if (!user) {
+    return res.status(422).json({ message: "server error" });
+  }
+  await verify.deleteOne();
+  user.verify = true;
+  await user.save();
+
+  return res.status(200).json({ message: "user verified" });
 };
