@@ -91,3 +91,22 @@ paths:
       responses:
         "201":
           description: recovery
+  /reset:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: reset
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                hash:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "204":
+          description: reset
