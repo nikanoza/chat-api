@@ -5,6 +5,7 @@ import {
   askPasswordRecovery,
   createUser,
   login,
+  passwordReset,
   verification,
 } from "controllers";
 
@@ -19,5 +20,6 @@ authRouter.post(
 authRouter.post("/verify", verification);
 authRouter.post("/login", login);
 authRouter.post("/recovery", askPasswordRecovery);
+authRouter.post("/reset", passwordReset);
 
 export default authRouter;
