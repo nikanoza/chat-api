@@ -1,7 +1,6 @@
 import Joi from "joi";
 
-import User from "../models/User.js";
-import { NewUser, PasswordRecoveryType, UserType } from "types";
+import { PasswordRecoveryType } from "types";
 import { PasswordRecovery } from "models";
 
 const determineIfHashExists =
