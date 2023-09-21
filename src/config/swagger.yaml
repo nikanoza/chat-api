@@ -72,3 +72,41 @@ paths:
       responses:
         "200":
           description: login
+  /recovery:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: recovery
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: string
+                backLink:
+                  type: string
+      responses:
+        "201":
+          description: recovery
+  /reset:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: reset
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                hash:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "204":
+          description: reset

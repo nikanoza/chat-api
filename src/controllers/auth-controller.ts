@@ -2,15 +2,18 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { EmailValidation, User } from "models";
-import { UserRegistrationSchema } from "schemas";
-import { sendEmailVerification } from "mail";
-import loginSchema from "schemas/user-login-schema";
+import { EmailValidation, PasswordRecovery, User } from "models";
+import {
+  userRegistrationSchema,
+  loginSchema,
+  passwordResetSchema,
+} from "schemas";
+import { sendEmailVerification, sendPasswordRecovery } from "mail";
 
 export const createUser = async (req: Request, res: Response) => {
   const { body, file } = req;
   const avatar = "/poster/" + file?.filename;
-  const validator = await UserRegistrationSchema(body);
+  const validator = await userRegistrationSchema(body);
   const { value, error } = validator.validate(body);
   if (error) {
     return res.status(422).json(error.details);
@@ -90,4 +93,55 @@ export const login = async (req: Request, res: Response) => {
   }
 
   return res.status(422).json({ message: "server error" });
+};
+
+export const askPasswordRecovery = async (req: Request, res: Response) => {
+  const { email, backLink } = req.body;
+  if (!backLink || !email) {
+    return res.status(422).json({ message: "server error" });
+  }
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(422).json({ message: "server error" });
+  }
+  const hash = crypto.randomBytes(48).toString("hex");
+
+  await PasswordRecovery.create({
+    email,
+    hash,
+  });
+  if (!backLink) {
+    return res.status(422).json({ message: "server error" });
+  }
+  await sendPasswordRecovery(email, hash, user.name, backLink);
+  return res.status(200).json({ message: "check your email" });
+};
+
+export const passwordReset = async (req: Request, res: Response) => {
+  const { body } = req;
+
+  const validator = await passwordResetSchema(body);
+  const { value, error } = validator.validate(body);
+  if (error) {
+    return res.status(422).json(error.details);
+  }
+
+  const { password, hash } = value;
+  const result = await PasswordRecovery.findOne({ hash });
+  if (!result) {
+    return res.status(422).json({ message: "server error" });
+  }
+
+  const user = await User.findOne({ email: result.email });
+  if (!user) {
+    return res.status(422).json({ message: "server error" });
+  }
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  user.password = hashedPassword;
+  await user.save();
+
+  return res.status(204).json({ message: "password reset" });
 };

@@ -11,3 +11,5 @@ export type EmailValidationType = {
   email: string;
   hash: string;
 };
+
+export type PasswordRecoveryType = EmailValidationType;
