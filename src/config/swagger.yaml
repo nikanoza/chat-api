@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Chat App
+  description: API
+  version: 0.1.9
+
+servers:
+  - url: http://localhost:4444/api
+    description: production server
+  - url: http://localhost:4444/api
+    description: local server
+paths:
+  /register:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: add avatar
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                backLink:
+                  type: string
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: user register successfully
+  /verify:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: verify account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                hash:
+                  type: string
+      responses:
+        "200":
+          description: user verify
+  /login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: login
