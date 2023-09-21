@@ -5,7 +5,7 @@ import { NewUser, UserType } from "types";
 
 const determineIfEmailExists =
   (user: UserType | null) => (value: string, helpers: any) => {
-    if (user) {
+    if (!user) {
       return helpers.message("there is user with this email");
     }
 
