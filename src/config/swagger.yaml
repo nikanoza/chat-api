@@ -53,3 +53,22 @@ paths:
       responses:
         "200":
           description: user verify
+  /login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: login
