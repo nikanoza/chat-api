@@ -10,3 +10,29 @@ servers:
   - url: http://localhost:4444/api
     description: local server
 paths:
+  /register:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: add avatar
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                backLink:
+                  type: string
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: user register successfully
