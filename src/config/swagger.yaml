@@ -36,3 +36,20 @@ paths:
       responses:
         "201":
           description: user register successfully
+  /verify:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        description: verify account
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                hash:
+                  type: string
+      responses:
+        "200":
+          description: user verify
