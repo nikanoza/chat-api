@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { EmailValidation, User } from "models";
+import { EmailValidation, PasswordRecovery, User } from "models";
 import { UserRegistrationSchema } from "schemas";
-import { sendEmailVerification } from "mail";
+import { sendEmailVerification, sendPasswordRecovery } from "mail";
 import loginSchema from "schemas/user-login-schema";
 
 export const createUser = async (req: Request, res: Response) => {
@@ -90,4 +90,27 @@ export const login = async (req: Request, res: Response) => {
   }
 
   return res.status(422).json({ message: "server error" });
+};
+
+export const askPasswordRecovery = async (req: Request, res: Response) => {
+  const { email, backLink } = req.body;
+  if (!backLink || !email) {
+    return res.status(422).json({ message: "server error" });
+  }
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return res.status(422).json({ message: "server error" });
+  }
+  const hash = crypto.randomBytes(48).toString("hex");
+
+  await PasswordRecovery.create({
+    email,
+    hash,
+  });
+  if (!backLink) {
+    return res.status(422).json({ message: "server error" });
+  }
+  await sendPasswordRecovery(email, hash, user.name, backLink);
+  return res.status(200).json({ message: "check your email" });
 };
