@@ -3,7 +3,7 @@ import YAML from "yamljs";
 
 const options = {
   customCss: ".swagger-ui .topbar { display: none }",
-  customSiteTitle: "movies-quotes",
+  customSiteTitle: "Chat App",
 };
 
 const swaggerDocument = YAML.load("./src/config/swagger.yaml");
