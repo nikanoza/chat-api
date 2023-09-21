@@ -5,7 +5,7 @@ import { PasswordRecovery } from "models";
 
 const determineIfHashExists =
   (user: PasswordRecoveryType | null) => (value: string, helpers: any) => {
-    if (user) {
+    if (!user) {
       return helpers.message("server error");
     }
 
